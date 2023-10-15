@@ -1,0 +1,63 @@
+version: '3'
+
+volumes:
+  production_postgres_data: {}
+  production_postgres_data_backups: {}
+  production_django_media: {}
+
+services:
+  django: &django
+    build:
+      context: .
+      dockerfile: ./compose/production/django/Dockerfile
+
+    image: shower_production_django
+    volumes:
+      - production_django_media:/app/shower/media
+    depends_on:
+      - postgres
+      - redis
+    env_file:
+      - ./.envs/.production/.django
+      - ./.envs/.production/.postgres
+    command: /start
+    ports:
+      - "8210:5000"
+
+  postgres:
+    build:
+      context: .
+      dockerfile: ./compose/production/postgres/Dockerfile
+    image: shower_production_postgres
+    volumes:
+      - production_postgres_data:/var/lib/postgresql/data
+      - production_postgres_data_backups:/backups
+    env_file:
+      - ./.envs/.production/.postgres
+
+  redis:
+    image: redis:6
+
+  celeryworker:
+    <<: *django
+    image: shower_production_celeryworker
+    command: /start-celeryworker
+    depends_on:
+      - postgres
+    ports: [ ]
+
+  celerybeat:
+    <<: *django
+    image: shower_production_celerybeat
+    command: /start-celerybeat
+    depends_on:
+      - postgres
+    ports: [ ]
+
+  flower:
+    <<: *django
+    image: shower_production_flower
+    command: /start-flower
+    ports:
+      - "8211:5555"
+
