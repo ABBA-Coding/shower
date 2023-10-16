@@ -1,6 +1,12 @@
 # serializers.py
 from rest_framework import serializers
-from .models import Business, Sites
+from .models import Business, Sites, Category
+
+
+class CategorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Category
+        fields = "__all__"
 
 
 class BusinessCreateSerializer(serializers.ModelSerializer):
@@ -31,4 +37,3 @@ class BusinessListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Business
         fields = "__all__"
-

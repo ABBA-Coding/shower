@@ -4,14 +4,27 @@ from django.contrib.auth import get_user_model
 User = get_user_model()
 
 
-class Business(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    name = models.CharField(max_length=255)
-    industry = models.CharField(max_length=255, blank=True, null=True)
-    business_size = models.CharField(max_length=100, blank=True, null=True)
+class Category(models.Model):
+    id = models.CharField("id", primary_key=True, max_length=25, db_index=True, unique=True)
+    name = models.CharField("name", max_length=255)
 
     def __str__(self):
-        return self.user
+        return self.id
+
+
+class Business(models.Model):
+    class BusinessBudget(models.IntegerChoices):
+        SMALL = 0, "Small"
+        MEDIUM = 1, "Medium"
+        LARGE = 2, "Large"
+
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    name = models.CharField(max_length=255)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE)
+    budget = models.IntegerField(choices=BusinessBudget.choices, default=BusinessBudget.SMALL)
+
+    def __str__(self):
+        return self.name
 
     class Meta:
         verbose_name = "Organization"
