@@ -13,6 +13,8 @@ from .serializers import UserSerializer, UserRegisterSerializer
 from .serializers import CustomTokenObtainPairSerializer
 from .serializers import GoogleSocialAuthSerializer, FacebookSocialAuthSerializer
 
+
+
 User = get_user_model()
 
 
@@ -46,11 +48,9 @@ class UserRegistrationView(generics.CreateAPIView):
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
 
-User = get_user_model()
-
 
 class GoogleSocialAuthView(generics.GenericAPIView):
-    queryset = User.objects.filter(is_verified=False)
+    queryset = User.objects.all()
     permission_classes = [AllowAny]
     serializer_class = GoogleSocialAuthSerializer
 
@@ -65,7 +65,7 @@ class GoogleSocialAuthView(generics.GenericAPIView):
 
 
 class FacebookSocialAuthView(generics.GenericAPIView):
-    queryset = User.objects.filter(is_verified=False)
+    queryset = User.objects.all()
     permission_classes = [AllowAny]
     serializer_class = FacebookSocialAuthSerializer
 
@@ -74,3 +74,6 @@ class FacebookSocialAuthView(generics.GenericAPIView):
         serializer.is_valid(raise_exception=True)
         data = ((serializer.validated_data)['auth_token'])
         return Response(data, status=status.HTTP_200_OK)
+
+
+

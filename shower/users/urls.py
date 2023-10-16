@@ -1,5 +1,3 @@
-from django.urls import path
-
 from shower.users.views import (
     user_detail_view,
     user_redirect_view,
@@ -7,8 +5,7 @@ from shower.users.views import (
 )
 
 from django.urls import path
-from .api.views import GoogleSocialAuthView, FacebookSocialAuthView, TwitterSocialAuthView, LinkedInSocialAuthView
-
+from .api.views import GoogleSocialAuthView, FacebookSocialAuthView
 
 app_name = "users"
 urlpatterns = [

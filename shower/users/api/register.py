@@ -1,26 +1,16 @@
 from allauth.account.models import EmailAddress
-from django.conf import settings
 from django.contrib.auth import authenticate
 import random
 from rest_framework.exceptions import AuthenticationFailed
 from django.contrib.auth import get_user_model
 from rest_framework_simplejwt.tokens import RefreshToken
 
-from smart_city.users.api.serializers import RegisterSerializer
+from shower.users.api.serializers import UserRegisterSerializer
 
 User = get_user_model()
 
 
-def generate_username(name):
-    username = "".join(name.split(' ')).lower()
-    if not User.objects.filter(username=username).exists():
-        return username
-    else:
-        random_username = username + str(random.randint(0, 1000))
-        return generate_username(random_username)
-
-
-def register_social_user(provider, user_id, email, name, first_name, last_name):
+def register_social_user(provider, user_id, email, name):
     email_check = User.objects.filter(email=email).first()
     if email_check is not None:
         registered_user = authenticate(
@@ -36,15 +26,13 @@ def register_social_user(provider, user_id, email, name, first_name, last_name):
                 detail='Your data is not match to login using ' + provider)
     else:
         user = {
-            'username': generate_username(name), 'email': email,
-            'first_name': first_name, 'last_name': last_name,
+            'email': email,
+            'name': name,
             'password': user_id}
-        serializer = RegisterSerializer(data=user)
+        serializer = UserRegisterSerializer(data=user)
         if serializer.is_valid(raise_exception=True):
             serializer.save()
             user = User.objects.filter(id=int(serializer.data['id'])).first()
-            user.is_verified = True
-            user.save()
             EmailAddress.objects.create(user=user, email=user.email, primary=True, verified=True)
         new_user = authenticate(
             username=user.username, password=user_id)

@@ -65,9 +65,7 @@ class FacebookSocialAuthSerializer(serializers.Serializer):
                 provider=provider,
                 user_id=user_id,
                 email=email,
-                name=name,
-                first_name=name,
-                last_name=''
+                name=name
             )
         except Exception as identifier:
             raise serializers.ValidationError(
@@ -90,10 +88,8 @@ class GoogleSocialAuthSerializer(serializers.Serializer):
             raise AuthenticationFailed('oops, who are you?')
         user_id = user_data['sub']
         email = user_data['email']
-        first_name = user_data['given_name']
-        last_name = user_data['family_name']
         name = user_data['name']
         provider = 'google'
         return register_social_user(
-            provider=provider, user_id=user_id, email=email, name=name, first_name=first_name, last_name=last_name)
+            provider=provider, user_id=user_id, email=email, name=name)
 
