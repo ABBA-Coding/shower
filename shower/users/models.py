@@ -4,6 +4,7 @@ from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
 from shower.users.managers import UserManager
+from django.db import models
 
 
 class User(AbstractUser):
@@ -33,3 +34,18 @@ class User(AbstractUser):
 
         """
         return reverse("users:detail", kwargs={"pk": self.id})
+
+
+class Business(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    name = CharField(max_length=255)
+    url = CharField(max_length=255)
+    industry = CharField(max_length=255)
+    business_size = CharField(max_length=100)
+
+    def __str__(self):
+        return self.user
+
+    class Meta:
+        verbose_name = "Организация"
+        verbose_name_plural = "Организации"

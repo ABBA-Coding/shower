@@ -7,8 +7,11 @@ from rest_framework.viewsets import GenericViewSet
 from rest_framework import generics
 
 from rest_framework_simplejwt.views import TokenObtainPairView
-from .serializers import CustomTokenObtainPairSerializer
+from rest_framework.permissions import AllowAny
+
 from .serializers import UserSerializer, UserRegisterSerializer
+from .serializers import CustomTokenObtainPairSerializer
+from .serializers import GoogleSocialAuthSerializer, FacebookSocialAuthSerializer
 
 User = get_user_model()
 
@@ -41,3 +44,33 @@ class UserRegistrationView(generics.CreateAPIView):
         self.perform_create(serializer)
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
+
+User = get_user_model()
+
+
+class GoogleSocialAuthView(generics.GenericAPIView):
+    queryset = User.objects.filter(is_verified=False)
+    permission_classes = [AllowAny]
+    serializer_class = GoogleSocialAuthSerializer
+
+    # def list(self, request, *args, **kwargs):
+    #     return Response(status=status.HTTP_200_OK)
+
+    def post(self, request):
+        serializer = self.serializer_class(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        data = ((serializer.validated_data)['auth_token'])
+        return Response(data, status=status.HTTP_200_OK)
+
+
+class FacebookSocialAuthView(generics.GenericAPIView):
+    queryset = User.objects.filter(is_verified=False)
+    permission_classes = [AllowAny]
+    serializer_class = FacebookSocialAuthSerializer
+
+    def post(self, request):
+        serializer = self.serializer_class(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        data = ((serializer.validated_data)['auth_token'])
+        return Response(data, status=status.HTTP_200_OK)
