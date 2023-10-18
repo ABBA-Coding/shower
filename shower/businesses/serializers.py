@@ -15,6 +15,12 @@ class BusinessCreateSerializer(serializers.ModelSerializer):
         model = Business
         exclude = ("user",)
 
+    def create(self, validated_data):
+        request = self.context.get('request')
+        user = request.user
+        business = Business.objects.create(user=user, **validated_data)
+        return business
+
 class BusinessListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Business

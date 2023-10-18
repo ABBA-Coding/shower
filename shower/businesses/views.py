@@ -41,7 +41,7 @@ class BusinessMeView(generics.ListAPIView):
 
 class BusinessWithoutAuthListView(generics.ListAPIView):
     serializer_class = BusinessListSerializer
-    queryset = Business.objects.prefetch_related("campaigns")
+    queryset = Business.objects.all()
 
 
 class CategoryView(generics.ListAPIView):
