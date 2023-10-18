@@ -2,7 +2,7 @@ from django.db import models
 
 
 class Campaign(models.Model):
-    business = models.OneToOneField("businesses.Business", on_delete=models.CASCADE, related_name="campaign")
+    business = models.ForeignKey("businesses.Business", on_delete=models.CASCADE, related_name="campaigns")
     website = models.CharField(max_length=100)
 
     def __str__(self):

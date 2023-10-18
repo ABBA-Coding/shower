@@ -18,7 +18,7 @@ class Business(models.Model):
         MEDIUM = 1, "Medium"
         LARGE = 2, "Large"
 
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
     name = models.CharField(max_length=255)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     budget = models.IntegerField(choices=BusinessBudget.choices, default=BusinessBudget.SMALL)

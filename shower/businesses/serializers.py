@@ -16,7 +16,14 @@ class BusinessCreateSerializer(serializers.ModelSerializer):
 
 
 class BusinessListSerializer(serializers.ModelSerializer):
-    campaign = CampaignListSerializer(many=False)
+    class Meta:
+        model = Business
+        fields = "__all__"
+
+
+class BusinessDetailSerializer(serializers.ModelSerializer):
+    campaigns = CampaignListSerializer(many=True)
+
     class Meta:
         model = Business
         fields = "__all__"
