@@ -85,8 +85,8 @@ THIRD_PARTY_APPS = [
 
 LOCAL_APPS = [
     "shower.users",
-    # Your stuff: custom apps go here
     "shower.businesses",
+    "shower.campaigns",
 ]
 # https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS

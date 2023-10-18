@@ -14,5 +14,6 @@ router.register("users", UserViewSet)
 app_name = "api"
 urlpatterns = router.urls
 urlpatterns += [
-    path("business/", include("shower.businesses.urls"), name="business")
+    path("business/", include("shower.businesses.urls"), name="business"),
+    path("campaign/", include("shower.campaigns.urls"), name="campaign")
 ]

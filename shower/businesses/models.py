@@ -22,6 +22,7 @@ class Business(models.Model):
     name = models.CharField(max_length=255)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     budget = models.IntegerField(choices=BusinessBudget.choices, default=BusinessBudget.SMALL)
+    website = models.CharField(max_length=100)
 
     def __str__(self):
         return self.name
@@ -29,15 +30,3 @@ class Business(models.Model):
     class Meta:
         verbose_name = "Organization"
         verbose_name_plural = "Organizations"
-
-
-class Sites(models.Model):
-    business = models.ForeignKey(Business, on_delete=models.CASCADE, related_name="websites")
-    url = models.CharField("URL", max_length=255)
-
-    def __str__(self):
-        return self.url
-
-    class Meta:
-        verbose_name = "Site"
-        verbose_name_plural = "Sites"

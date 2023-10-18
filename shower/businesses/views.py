@@ -12,12 +12,19 @@ class BusinessCreateAPIView(generics.CreateAPIView):
 
 
 class BusinessListView(generics.ListAPIView):
+    "Business list for authenticated user"
     serializer_class = BusinessListSerializer
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
         user = self.request.user
         return Business.objects.filter(user=user)
+
+
+class BusinessWithoutAuthListView(generics.ListAPIView):
+    serializer_class = BusinessListSerializer
+    queryset = Business.objects.all()
+
 
 
 class CategoryView(generics.ListAPIView):

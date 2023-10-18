@@ -1,20 +1,10 @@
 from django.contrib import admin
 
-from shower.businesses.models import Business, Sites, Category
-
-
-class SitesInline(admin.TabularInline):
-    model = Sites
-    extra = 1
+from shower.businesses.models import Business, Category
 
 
 @admin.register(Business)
 class BusinessAdmin(admin.ModelAdmin):
-    inlines = [SitesInline]
-
-
-@admin.register(Sites)
-class SitesAdmin(admin.ModelAdmin):
     ...
 
 
