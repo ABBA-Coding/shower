@@ -12,10 +12,8 @@ def register_social_user(provider, user_id, email, name):
     email_check = User.objects.filter(email=email)
     if email_check.exists():
         email_check = email_check.first()
-        registered_user = authenticate(
-            email=email_check.email, password=user_id)
-        if registered_user:
-            refresh = RefreshToken.for_user(registered_user)
+        if email_check:
+            refresh = RefreshToken.for_user(email_check)
             return {
                 'refresh': str(refresh),
                 'access': str(refresh.access_token)
@@ -30,9 +28,7 @@ def register_social_user(provider, user_id, email, name):
             'password': user_id}
         user = User.objects.create(**user_data)
         EmailAddress.objects.create(user=user, email=user.email, primary=True, verified=True)
-        new_user = authenticate(
-            email=user.email, password=user_id)
-        if new_user:
+        if user:
             refresh = RefreshToken.for_user(user)
             return {
                 'refresh': str(refresh),
