@@ -9,10 +9,11 @@ User = get_user_model()
 
 
 def register_social_user(provider, user_id, email, name):
-    email_check = User.objects.filter(email=email).first()
-    if email_check is not None:
+    email_check = User.objects.filter(email=email)
+    if email_check.exists():
+        email_check = email_check.first()
         registered_user = authenticate(
-            username=email_check.username, password=user_id)
+            email=email_check.email, password=user_id)
         if registered_user:
             refresh = RefreshToken.for_user(registered_user)
             return {
@@ -30,7 +31,7 @@ def register_social_user(provider, user_id, email, name):
         user = User.objects.create(**user_data)
         EmailAddress.objects.create(user=user, email=user.email, primary=True, verified=True)
         new_user = authenticate(
-            username=user.username, password=user_id)
+            email=user.email, password=user_id)
         if new_user:
             refresh = RefreshToken.for_user(user)
             return {
