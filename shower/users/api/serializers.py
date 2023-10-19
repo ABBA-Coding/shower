@@ -1,6 +1,7 @@
 from django.contrib.auth import get_user_model
 from rest_framework import serializers
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+from django.conf import settings
 
 from shower.users.models import User as UserType
 
@@ -41,8 +42,6 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
         return token
 
 
-import requests
-from django.conf import settings
 from rest_framework import serializers
 from . import google, facebook
 from .register import register_social_user
