@@ -47,7 +47,9 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
 
 
 class GoogleSocialAuthSerializer(serializers.Serializer):
-    code = serializers.CharField()
+    code = serializers.CharField(write_only=True)
+    access = serializers.CharField(read_only=True)
+    refresh = serializers.CharField(read_only=True)
 
     def get_user_data(self, code):
         token_data = {
