@@ -60,8 +60,8 @@ class GoogleSocialAuthView(generics.GenericAPIView):
         auth_token = serializer.validated_data['code']
 
         try:
-            # user = serializer.validate_auth_token(auth_token)
-            user = serializer.get_user_data(auth_token)
+            user = serializer.validate_auth_token(auth_token)
+            # user = serializer.get_user_data(auth_token)
             return Response(user, status=status.HTTP_200_OK)
         except serializers.ValidationError as e:
             return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)

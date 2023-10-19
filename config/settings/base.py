@@ -357,12 +357,12 @@ SIMPLE_JWT = {
     'USER_ID_CLAIM': 'user_id',
     'AUTH_TOKEN_CLASSES': ('rest_framework_simplejwt.tokens.AccessToken',),
 }
-CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOWED_ORIGINS = [
     'http://localhost:3000',
     'http://localhost:3001',
 ]
+
 CSRF_TRUSTED_ORIGINS = ['https://shower.itlink.uz']
 GOOGLE_CLIENT_ID = "228095243133-r0grd84c6kncaverm8shect7sa6c139o.apps.googleusercontent.com"
 GOOGLE_CLIENT_SECRET = "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"
