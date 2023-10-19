@@ -59,14 +59,16 @@ class GoogleSocialAuthSerializer(serializers.Serializer):
         }
         token_url = 'https://oauth2.googleapis.com/token'
         token_response = requests.post(token_url, data=token_data)
-
-        access_token = token_response.json()['access_token']
-        headers = {'Authorization': f'Bearer {access_token}'}
-        response = requests.get('https://www.googleapis.com/oauth2/v2/userinfo', headers=headers)
-        if response.status_code == 200:
-            return response.json()
+        if token_response.status_code == 200:
+            access_token = token_response.json()['access_token']
+            headers = {'Authorization': f'Bearer {access_token}'}
+            response = requests.get('https://www.googleapis.com/oauth2/v2/userinfo', headers=headers)
+            if response.status_code == 200:
+                return response.json()
+            else:
+                return None
         else:
-            return None
+            raise ConnectionError(f"Error: {token_response.json()}")
 
     def validate_auth_token(self, auth_token):
         user_data = self.get_user_data(auth_token)
