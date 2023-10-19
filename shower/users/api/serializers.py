@@ -68,7 +68,7 @@ class GoogleSocialAuthSerializer(serializers.Serializer):
             else:
                 return None
         else:
-            raise ConnectionError(f"Error: {token_response.json()}")
+            raise serializers.ValidationError(f"Error: {token_response.json()}")
 
     def validate_auth_token(self, auth_token):
         user_data = self.get_user_data(auth_token)
