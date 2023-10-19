@@ -1,9 +1,12 @@
+import requests
 from django.contrib.auth import get_user_model
-from rest_framework import serializers
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from django.conf import settings
 
 from shower.users.models import User as UserType
+
+from rest_framework import serializers
+from .register import register_social_user
 
 User = get_user_model()
 
@@ -42,53 +45,42 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
         return token
 
 
-from rest_framework import serializers
-from . import google, facebook
-from .register import register_social_user
-from rest_framework.exceptions import AuthenticationFailed
 
+class GoogleSocialAuthSerializer(serializers.Serializer):
+    code = serializers.CharField()
 
-class FacebookSocialAuthSerializer(serializers.Serializer):
-    """Handles serialization of facebook related data"""
-    auth_token = serializers.CharField()
+    def get_user_data(self, code):
+        token_data = {
+            'code': code,
+            'client_id': settings.GOOGLE_CLIENT_ID,
+            'client_secret': settings.GOOGLE_CLIENT_SECRET,
+            'redirect_uri': "localhost:3000",
+            'grant_type': 'authorization_code'
+        }
+        token_url = 'https://oauth2.googleapis.com/token'
+        token_response = requests.post(token_url, data=token_data)
+
+        access_token = token_response.json()['access_token']
+        headers = {'Authorization': f'Bearer {access_token}'}
+        response = requests.get('https://www.googleapis.com/oauth2/v2/userinfo', headers=headers)
+        if response.status_code == 200:
+            return response.json()
+        else:
+            return None
 
     def validate_auth_token(self, auth_token):
-        user_data = facebook.Facebook.validate(auth_token)
-
-        try:
+        user_data = self.get_user_data(auth_token)
+        if user_data:
             user_id = user_data['id']
             email = user_data['email']
             name = user_data['name']
-            provider = 'facebook'
+            provider = 'google'
             return register_social_user(
                 provider=provider,
                 user_id=user_id,
                 email=email,
-                name=name
-            )
-        except Exception as identifier:
+                name=name)
+        else:
             raise serializers.ValidationError(
                 'The token  is invalid or expired. Please login again.'
             )
-
-
-class GoogleSocialAuthSerializer(serializers.Serializer):
-    auth_token = serializers.CharField()
-
-    def validate_auth_token(self, auth_token):
-        user_data = google.Google.validate(auth_token)
-        try:
-            user_data['sub']
-        except:
-            raise serializers.ValidationError(
-                'The token is invalid or expired. Please login again.'
-            )
-        if user_data['aud'] != settings.GOOGLE_CLIENT_ID:
-            raise AuthenticationFailed('oops, who are you?')
-        user_id = user_data['sub']
-        email = user_data['email']
-        name = user_data['name']
-        provider = 'google'
-        return register_social_user(
-            provider=provider, user_id=user_id, email=email, name=name)
-

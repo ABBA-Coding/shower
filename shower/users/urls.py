@@ -5,7 +5,7 @@ from shower.users.views import (
 )
 
 from django.urls import path
-from .api.views import GoogleSocialAuthView, FacebookSocialAuthView
+from .api.views import GoogleSocialAuthView
 
 app_name = "users"
 urlpatterns = [
@@ -15,5 +15,4 @@ urlpatterns = [
 
     # API
     path('google/', GoogleSocialAuthView.as_view()),
-    path('facebook/', FacebookSocialAuthView.as_view()),
 ]

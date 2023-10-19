@@ -1,5 +1,5 @@
 from django.contrib.auth import get_user_model
-from rest_framework import status
+from rest_framework import status, serializers
 from rest_framework.decorators import action
 from rest_framework.mixins import ListModelMixin, RetrieveModelMixin, UpdateModelMixin
 from rest_framework.response import Response
@@ -11,7 +11,7 @@ from rest_framework.permissions import AllowAny
 
 from .serializers import UserSerializer, UserRegisterSerializer
 from .serializers import CustomTokenObtainPairSerializer
-from .serializers import GoogleSocialAuthSerializer, FacebookSocialAuthSerializer
+from .serializers import GoogleSocialAuthSerializer
 
 
 
@@ -54,26 +54,14 @@ class GoogleSocialAuthView(generics.GenericAPIView):
     permission_classes = [AllowAny]
     serializer_class = GoogleSocialAuthSerializer
 
-    # def list(self, request, *args, **kwargs):
-    #     return Response(status=status.HTTP_200_OK)
-
     def post(self, request):
         serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
-        data = ((serializer.validated_data)['auth_token'])
-        return Response(data, status=status.HTTP_200_OK)
+        auth_token = serializer.validated_data['code']
 
-
-class FacebookSocialAuthView(generics.GenericAPIView):
-    queryset = User.objects.all()
-    permission_classes = [AllowAny]
-    serializer_class = FacebookSocialAuthSerializer
-
-    def post(self, request):
-        serializer = self.serializer_class(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        data = ((serializer.validated_data)['auth_token'])
-        return Response(data, status=status.HTTP_200_OK)
-
-
+        try:
+            user = serializer.validate_auth_token(auth_token)
+            return Response(user, status=status.HTTP_200_OK)
+        except serializers.ValidationError as e:
+            return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
 

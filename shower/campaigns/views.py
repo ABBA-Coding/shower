@@ -1,5 +1,4 @@
 from rest_framework import generics
-from rest_framework.permissions import IsAuthenticated
 
 from .models import Campaign
 from .serializers import CampaignUpdateSerializer, CampaignListSerializer, CampaignCreateSerializer
