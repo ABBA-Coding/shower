@@ -16,5 +16,5 @@ urlpatterns = router.urls
 urlpatterns += [
     path("business/", include("shower.businesses.urls"), name="business"),
     path("campaign/", include("shower.campaigns.urls"), name="campaign"),
-    path('users/google/', GoogleSocialAuthView.as_view()),
+    path('google/', GoogleSocialAuthView.as_view()),
 ]
