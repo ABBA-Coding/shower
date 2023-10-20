@@ -40,7 +40,7 @@ class CampaignCreateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Campaign
-        fields = ('website', 'descriptions', 'headlines', 'business')
+        fields = "__all__"
 
     def create(self, validated_data):
         descriptions_data = validated_data.pop('descriptions', None)

@@ -84,6 +84,7 @@ LOCAL_APPS = [
     "shower.users",
     "shower.businesses",
     "shower.campaigns",
+    "shower.orders",
 ]
 # https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
@@ -310,6 +311,13 @@ SPECTACULAR_SETTINGS = {
     "DESCRIPTION": "Documentation of API endpoints of Shower",
     "VERSION": "1.0.0",
     "SERVE_PERMISSIONS": ["rest_framework.permissions.AllowAny"],
+    "SERVERS": [
+        {"url": "https://shower.itlink.uz", "description": "Production server"},
+        {"url": "http://localhost:8000", "description": "Local Development server"},
+    ],
+    'COMPONENT_SPLIT_REQUEST': True,
+    'SCHEMA_PATH_PREFIX': '/api/',
+    'SERVE_INCLUDE_SCHEMA': False,
 }
 # Your stuff...
 # ------------------------------------------------------------------------------
@@ -336,3 +344,4 @@ CORS_ALLOWED_ORIGINS = [
 CSRF_TRUSTED_ORIGINS = ['https://shower.itlink.uz']
 GOOGLE_CLIENT_ID = "228095243133-r0grd84c6kncaverm8shect7sa6c139o.apps.googleusercontent.com"
 GOOGLE_CLIENT_SECRET = "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"
+APIR_ID = "apr-51575a05fc7c72be1da34adcabeb96b3"
