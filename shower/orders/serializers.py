@@ -19,7 +19,8 @@ class OrderCreateSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         amount = validated_data.get('amount')
         currency = validated_data.get('currency')
-        is_success, invoice_response = create_invoice(amount, currency)
+        campaign_id = validated_data.get('campaign')
+        is_success, invoice_response = create_invoice(amount, currency, campaign_id)
         if is_success:
             validated_data['invoice_id'] = invoice_response.get('invoice_id')
             order = Order.objects.create(**validated_data)
