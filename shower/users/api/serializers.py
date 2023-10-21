@@ -10,11 +10,17 @@ from .register import register_social_user
 
 User = get_user_model()
 
+class UserBusinessSerializer(serializers.Serializer):
+    id = serializers.IntegerField()
+    name = serializers.CharField()
+
 
 class UserSerializer(serializers.ModelSerializer[UserType]):
+    business = UserBusinessSerializer(many=False)
+
     class Meta:
         model = User
-        fields = ["name", "url"]
+        fields = ["name", "url", "business"]
 
         extra_kwargs = {
             "url": {"view_name": "api:user-detail", "lookup_field": "pk"},

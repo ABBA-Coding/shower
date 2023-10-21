@@ -7,7 +7,7 @@ from rest_framework.viewsets import GenericViewSet
 from rest_framework import generics
 
 from rest_framework_simplejwt.views import TokenObtainPairView
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import AllowAny, IsAuthenticated
 
 from .serializers import UserSerializer, UserRegisterSerializer
 from .serializers import CustomTokenObtainPairSerializer
@@ -22,6 +22,7 @@ class UserViewSet(RetrieveModelMixin, ListModelMixin, UpdateModelMixin, GenericV
     serializer_class = UserSerializer
     queryset = User.objects.all()
     lookup_field = "pk"
+    permission_classes = [IsAuthenticated]
 
     def get_queryset(self, *args, **kwargs):
         assert isinstance(self.request.user.id, int)
