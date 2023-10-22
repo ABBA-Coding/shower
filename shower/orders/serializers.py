@@ -3,6 +3,12 @@ from .models import Order, PriceList
 from ..utils.payment import create_invoice
 
 
+class OrderListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Order
+        fields = "__all__"
+
+
 class PriceListSerializer(serializers.ModelSerializer):
     class Meta:
         model = PriceList

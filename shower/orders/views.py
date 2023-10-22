@@ -4,12 +4,30 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from .models import Order, PriceList
-from .serializers import PriceListSerializer, OrderCreateSerializer
+from .serializers import PriceListSerializer, OrderCreateSerializer, OrderListSerializer
+from ..businesses.models import Business
 
 
 class PriceListView(generics.ListAPIView):
     queryset = PriceList.objects.all()
     serializer_class = PriceListSerializer
+
+
+class OrderListView(APIView):
+    queryset = Order.objects.all()
+    serializer_class = OrderListSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, *args, **kwargs):
+        user = self.request.user
+        business_qs = Business.objects.filter(user=user)
+        if business_qs.exists():
+            business_obj = business_qs.first()
+            qs = Order.objects.filter(campaign__business_id=business_obj.pk)
+        else:
+            qs = Order.objects.none()
+        serializer = self.serializer_class(qs, many=True)
+        return Response(serializer.data)
 
 
 class ApironeCallbackView(APIView):
