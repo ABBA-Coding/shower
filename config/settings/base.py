@@ -339,7 +339,7 @@ CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOWED_ORIGINS = [
     'http://localhost:3000',
     'http://localhost:3001',
-    'https://shower-app.netlify.app/',
+    'https://shower-app.netlify.app',
 ]
 
 CSRF_TRUSTED_ORIGINS = ['https://shower.itlink.uz']

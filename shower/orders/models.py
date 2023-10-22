@@ -13,7 +13,6 @@ class OrderCurrencyChoice(models.TextChoices):
 class PriceList(models.Model):
     amount = models.IntegerField()
     currency = models.CharField(max_length=5, choices=OrderCurrencyChoice.choices)
-    days = models.IntegerField()
     is_deleted = models.BooleanField(default=False, db_index=True)
 
     class Meta:
