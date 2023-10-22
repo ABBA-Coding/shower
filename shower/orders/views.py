@@ -15,7 +15,7 @@ class PriceListView(generics.ListAPIView):
 
 
 class OrderListView(APIView):
-    queryset = Order.objects.all()
+    queryset = Order.objects.select_related("campaign")
     serializer_class = OrderListSerializer
     permission_classes = [IsAuthenticated]
 
@@ -24,7 +24,7 @@ class OrderListView(APIView):
         business_qs = Business.objects.filter(user=user)
         if business_qs.exists():
             business_obj = business_qs.first()
-            qs = Order.objects.filter(campaign__business_id=business_obj.pk)
+            qs = Order.objects.filter(campaign__business_id=business_obj.pk).select_related("campaign")
         else:
             qs = Order.objects.none()
         serializer = self.serializer_class(qs, many=True)

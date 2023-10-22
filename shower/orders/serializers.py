@@ -4,6 +4,7 @@ from ..utils.payment import create_invoice
 
 
 class OrderListSerializer(serializers.ModelSerializer):
+    campaign_name = serializers.StringRelatedField(source="campaign.name")
     class Meta:
         model = Order
         fields = "__all__"
