@@ -35,7 +35,7 @@ class Order(models.Model):
         PARTPAID = 3, "PARTPAID"
 
     campaign = models.ForeignKey("campaigns.Campaign", on_delete=models.CASCADE, related_name="orders")
-    amount = models.IntegerField()
+    amount = models.BigIntegerField()
     currency = models.CharField(max_length=5, choices=OrderCurrencyChoice.choices)
     days = models.IntegerField()
     created_at = models.DateTimeField(auto_now_add=True)

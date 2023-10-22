@@ -1,4 +1,5 @@
 from rest_framework import generics
+from rest_framework import status as rest_status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -39,14 +40,16 @@ class ApironeCallbackView(APIView):
             order = Order.objects.get(invoice_id=invoice)
             if status in ['paid', 'overpaid', 'completed']:
                 order.status = Order.OrderStatusChoices.PAID
+                order.save()
             elif status == "expired":
                 order.status = Order.OrderStatusChoices.EXPIRED
+                order.save()
             else:
                 order.status = Order.OrderStatusChoices.PARTPAID
-            order.save()
-            return Response(status=status.HTTP_200_OK)
+                order.save()
+            return Response(status=rest_status.HTTP_200_OK)
         except Order.DoesNotExist:
-            return Response(status=status.HTTP_404_NOT_FOUND)
+            return Response(status=rest_status.HTTP_404_NOT_FOUND)
 
 
 class OrderCreateView(generics.CreateAPIView):

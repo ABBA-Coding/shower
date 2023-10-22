@@ -8,12 +8,12 @@ def create_invoice(amount, currency, campaign_id):
     payload = {
         "amount": amount,
         "currency": currency,
-        'lifetime': 10,
+        'lifetime': 3600,
         "callback_url": "https://shower.itlink.uz/api/orders/apirone-callback/",
         "user-data": {
             "title": "Invoice for campaign",
             "merchant": "Shower",
-            "url": "http://exampleshop.com",
+            "url": "https://shower.com",
         },
         "linkback": "http://localhost:3000/success?campaign_id={}".format(campaign_id),
     }
