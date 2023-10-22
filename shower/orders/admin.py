@@ -9,7 +9,7 @@ class OrderAdmin(admin.ModelAdmin):
     list_display = ["campaign", "amount", "currency", "status", "display_created_at", "invoice_id"]
 
     def display_created_at(self, obj):
-        return timesince(obj.updated_at) + ' ago'
+        return timesince(obj.created_at) + ' ago'
 
     display_created_at.short_description = 'Updated at'
 
