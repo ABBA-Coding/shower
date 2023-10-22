@@ -15,16 +15,21 @@ class Campaign(models.Model):
         TWITTER = "twitter", "twitter"
         BANNER = "banner", "banner"
 
+    class CampaignLanguageChoices(models.TextChoices):
+        ENGLISH = "english", "english"
+        RUSSIAN = "russian", "russian"
+        OTHER = "other", "other"
+
     name = models.CharField(max_length=90)
     business = models.ForeignKey("businesses.Business", on_delete=models.CASCADE, related_name="campaigns")
     website = models.CharField(max_length=100)
     country = models.CharField(max_length=50)
-    language = models.CharField(max_length=10, choices=CampaignPlatformChoice.choices)
+    language = models.CharField(max_length=10, choices=CampaignLanguageChoices.choices)
     status = models.IntegerField(
         choices=CampaignStatusChoices.choices,
         default=CampaignStatusChoices.DRAFT,
         editable=False)
-    platform = models.CharField(max_length=10)
+    platform = models.CharField(max_length=10, choices=CampaignPlatformChoice.choices)
 
     purpose = models.CharField(max_length=255, null=True, blank=True)
     cell_phone = models.CharField(max_length=20, null=True, blank=True)
