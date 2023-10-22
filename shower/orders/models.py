@@ -37,6 +37,7 @@ class Order(models.Model):
 
     campaign = models.ForeignKey("campaigns.Campaign", on_delete=models.CASCADE, related_name="orders")
     amount = models.IntegerField()
+    currency = models.CharField(max_length=5, choices=OrderCurrencyChoice.choices)
     days = models.IntegerField()
     created_at = models.DateTimeField(auto_now_add=True)
     status = models.IntegerField(choices=OrderStatusChoices.choices, default=OrderStatusChoices.CREATED, editable=False)
