@@ -22,7 +22,7 @@ class OrderCreateSerializer(serializers.ModelSerializer):
         campaign_id = validated_data.get('campaign')
         is_success, invoice_response = create_invoice(amount, currency, campaign_id)
         if is_success:
-            validated_data['invoice_id'] = invoice_response.get('invoice_id')
+            validated_data['invoice_id'] = invoice_response.get('invoice')
             order = Order.objects.create(**validated_data)
             return order
         else:
