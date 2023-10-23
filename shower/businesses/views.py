@@ -35,7 +35,7 @@ class BusinessMeView(generics.ListAPIView):
         if qs.exists():
             qs = qs.first()
         else:
-            return Response(self.serializer_class(Business.objects.none()), status.HTTP_200_OK)
+            return Response(self.serializer_class(Business.objects.none()).data, status.HTTP_200_OK)
         return Response(self.serializer_class(qs).data)
 
 
