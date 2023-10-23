@@ -62,7 +62,7 @@ class GoogleSocialAuthSerializer(serializers.Serializer):
             'code': code,
             'client_id': settings.GOOGLE_CLIENT_ID,
             'client_secret': settings.GOOGLE_CLIENT_SECRET,
-            'redirect_uri': "http://localhost:3000",
+            'redirect_uri': "https://shower-app.netlify.app",
             'grant_type': 'authorization_code'
         }
         token_url = 'https://oauth2.googleapis.com/token'
